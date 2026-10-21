@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PedidosApi.Antes/PedidosApi.Antes.csproj" />
+  <Project Path="PedidosApi.Depois/PedidosApi.Depois.csproj" />
+  <Project Path="PedidosApi.Depois.Tests/PedidosApi.Depois.Tests.csproj" />
+</Solution>

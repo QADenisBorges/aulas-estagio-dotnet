@@ -1,0 +1,98 @@
+@host = http://localhost:5103
+
+### 1. Criar produto
+# @name criarTeclado
+POST {{host}}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "Teclado",
+  "preco": 150.00
+}
+
+### 2. Criar segundo produto
+POST {{host}}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "Mouse",
+  "preco": 80.00
+}
+
+### 2b. Nome repetido -> 400 (regra do service, usando IProdutoRepository.ExisteComNome)
+POST {{host}}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "teclado",
+  "preco": 10.00
+}
+
+### 3. Listar produtos (paginado)
+GET {{host}}/api/produtos?pagina=1&tamanho=10
+
+### 4. Obter produto pelo id (copie o id da resposta do passo 1)
+GET {{host}}/api/produtos/{{criarTeclado.response.body.id}}
+
+### 5. Atualizar preço
+PUT {{host}}/api/produtos/{{criarTeclado.response.body.id}}/preco
+Content-Type: application/json
+
+{
+  "preco": 199.90
+}
+
+### 6. Tentar preço negativo -> 400 (regra está na entidade, não no controller)
+PUT {{host}}/api/produtos/{{criarTeclado.response.body.id}}/preco
+Content-Type: application/json
+
+{
+  "preco": -5
+}
+
+### 7. Desativar
+POST {{host}}/api/produtos/{{criarTeclado.response.body.id}}/desativar
+
+### 8. Listar só ativos (o Teclado some)
+GET {{host}}/api/produtos?somenteAtivos=true
+
+### 9. Remover
+DELETE {{host}}/api/produtos/{{criarTeclado.response.body.id}}
+
+### 10. Buscar o removido -> 404
+GET {{host}}/api/produtos/{{criarTeclado.response.body.id}}
+
+### 11. Nome vazio -> 400
+POST {{host}}/api/produtos
+Content-Type: application/json
+
+{
+  "nome": "   ",
+  "preco": 10
+}
+
+### ===== Segunda entidade: mesmo Repository<T>, zero código novo de armazenamento =====
+
+### 12. Criar categoria
+# @name criarCategoria
+POST {{host}}/api/categorias
+Content-Type: application/json
+
+{
+  "nome": "Periféricos",
+  "descricao": "Teclados, mouses, headsets"
+}
+
+### 13. Listar categorias
+GET {{host}}/api/categorias
+
+### 14. Renomear
+PUT {{host}}/api/categorias/{{criarCategoria.response.body.id}}/nome
+Content-Type: application/json
+
+{
+  "nome": "Acessórios"
+}
+
+### 15. Remover categoria
+DELETE {{host}}/api/categorias/{{criarCategoria.response.body.id}}

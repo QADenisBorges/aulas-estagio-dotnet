@@ -1,0 +1,85 @@
+@host = http://localhost:5135
+
+### Listar todos -> 200
+GET {{host}}/produtos
+Accept: application/json
+
+### Filtrar por query string -> 200
+GET {{host}}/produtos?categoria=perifericos&ativo=true
+Accept: application/json
+
+### Paginar -> 200
+GET {{host}}/produtos?pagina=1&tamanhoPagina=2
+Accept: application/json
+
+### Buscar por id -> 200
+GET {{host}}/produtos/1
+Accept: application/json
+
+### Id inexistente -> 404
+GET {{host}}/produtos/999
+Accept: application/json
+
+### Criar -> 201 + header Location
+POST {{host}}/produtos
+Content-Type: application/json
+
+{
+  "nome": "Webcam Full HD",
+  "preco": 289.90,
+  "categoria": "perifericos"
+}
+
+### Dados invalidos -> 400
+POST {{host}}/produtos
+Content-Type: application/json
+
+{
+  "nome": "X",
+  "preco": -5,
+  "categoria": ""
+}
+
+### Nome duplicado -> 400
+POST {{host}}/produtos
+Content-Type: application/json
+
+{
+  "nome": "Mouse sem fio",
+  "preco": 10.00,
+  "categoria": "perifericos"
+}
+
+### Substituir tudo -> 200
+PUT {{host}}/produtos/2
+Content-Type: application/json
+
+{
+  "nome": "Mouse sem fio Pro",
+  "preco": 199.90,
+  "categoria": "perifericos",
+  "ativo": true
+}
+
+### Atualizar so o preco -> 200
+PATCH {{host}}/produtos/2
+Content-Type: application/json
+
+{
+  "preco": 149.90
+}
+
+### Remover -> 204
+DELETE {{host}}/produtos/3
+
+### Remover de novo -> 404
+DELETE {{host}}/produtos/3
+
+### Ver headers recebidos -> 200
+GET {{host}}/exemplos/headers
+Accept: application/json
+X-Origem-Requisicao: teste
+
+### Erro inesperado -> 500
+GET {{host}}/exemplos/erro
+Accept: application/json
